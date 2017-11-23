@@ -6,7 +6,11 @@
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+	<!-- Custom CSS -->
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+	<!-- Star Wars glyphs CSS -->
+	<link rel="stylesheet" href="assets/starwars-glyphicons/css/starwars-glyphicons.css">
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 
@@ -16,35 +20,108 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
+	<!-- Audio -->
+	<audio id="lightsaber-on">
+		<source src="assets/sounds/lightsaber-turnon.wav" type="audio/wav">
+		Your browser does not support the audio element.
+	</audio>
+
+	<audio id="darth-vader-breathing">
+		<source src="assets/sounds/darth-vader-breathing.wav" type="audio/wav">
+		Your browser does not support the audio element.
+	</audio>
+
+	<audio id="palpatine-good">
+		<source src="assets/sounds/palpatine-good.mp3" type="audio/wav">
+		Your browser does not support the audio element.
+	</audio>
+
+	<!-- End Audio -->
+
 	<div class="container">
 		<div class="row">
 			<div class="col-md-3">
-				<img src="assets/images/luke-skywalker250x250.png" id="luke-skywalker" class="img-responsive" alt="">
+				<div id="luke-skywalker" class="panel panel-default">
+  					<div class="panel-heading">
+    					<h3 class="panel-title"></h3>
+  					</div>
+  					<div class="panel-body">
+    					<img src="assets/images/luke-skywalker250x250.png" class="character-img img-responsive" alt="">
+  					</div>
+  					<div class="panel-footer"></div>
+				</div>
 			</div>
 			<div class="col-md-3">
-				<img src="assets/images/darth-vader250x250.png" id="darth-vader" class="img-responsive" alt="">
+				<div id="darth-vader" class="panel panel-default">
+  					<div class="panel-heading">
+    					<h3 class="panel-title"></h3>
+  					</div>
+  					<div class="panel-body">
+    					<img src="assets/images/darth-vader250x250.png" class="character-img img-responsive" alt="">
+  					</div>
+  					<div class="panel-footer"></div>
+				</div>
 			</div>
 			<div class="col-md-3">
-				<img src="assets/images/obi-wan250x250.png" id="obi-wan" class="img-responsive" alt="">
+				<div id="obi-wan" class="panel panel-default">
+  					<div class="panel-heading">
+    					<h3 class="panel-title"></h3>
+  					</div>
+  					<div class="panel-body">
+    					<img src="assets/images/obi-wan250x250.png" class="character-img img-responsive" alt="">
+  					</div>
+  					<div class="panel-footer"></div>
+				</div>
 			</div>
 			<div class="col-md-3">
-				<img src="assets/images/emperor-palpatine250x250.png" id="palpatine" class="img-responsive" alt="">
+				<div id="palpatine" class="panel panel-default">
+  					<div class="panel-heading">
+    					<h3 class="panel-title"></h3>
+  					</div>
+  					<div class="panel-body">
+    					<img src="assets/images/emperor-palpatine250x250.png" class="character-img img-responsive" alt="">
+  					</div>
+  					<div class="panel-footer"></div>
+				</div>
 			</div>
 		</div>
 
 		<div class="row">
-			<div id="selected-character" class="col-md-6">
+			<div id="selected-character" class="col-md-3">
 				<span>Selected Fighter</span>
 			</div>
+			<div class="col-md-1">
+				<span>VS</span>
+			</div>
+			<div id="enemy-selected" class="col-md-3">
+				<span>Defender</span>
+			</div>
+			<div class="col-md-5"></div>
 		</div>
 
 		<div class="row">
-			<div id="available-enemies-1" class="col-md-4"></div>
-			<div id="available-enemies-2" class="col-md-4"></div>
-			<div id="available-enemies-3" class="col-md-4"></div>
+			<div class="col-md-3">
+				<button type="button" id="attack-button" class="btn btn-default btn-md">
+  					<span class="swg swg-saberjedi swg-2x"></span> Attack
+				</button>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="row">
+				<div class="col-md-3">
+					<span>Available Enemies</span>
+				</div>
+			</div>
+			<div class="row">
+				<div id="available-enemies-1" class="col-md-3"></div>
+				<div id="available-enemies-2" class="col-md-3"></div>
+				<div id="available-enemies-3" class="col-md-3"></div>
+			</div>
 		</div>
 	</div>
 
 	<script type="text/javascript" src="assets/javascript/game.js"></script>
+	<script type="text/javascript"> startGame();</script>
 </body>
 </html>
