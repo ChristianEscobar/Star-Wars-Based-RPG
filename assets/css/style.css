@@ -1,8 +1,55 @@
+@font-face {
+    font-family: starWarsFont;
+    src: url(../fonts/RedFive.otf);
+}
+
+body {
+	font-family: starWarsFont;
+}
+
 .character-img {
 	cursor: pointer;
 }
 
+.panel-footer, .panel-default > .panel-heading {
+	text-align: center;
+	color: #eca637;
+	height: 41px;
+	background-color: #5f6f77;
+	font-size: 110%;
+}
+
+.section-heading {
+	font-size: 150%;
+	color: #bc722e;
+}
+
+.element-red-box-shadow {
+	box-shadow: 10px 10px 5px #ff0000;
+}
+
+.element-green-box-shadow {
+	box-shadow: 10px 10px 5px #66ff33;
+}
+
+#vs-text-container {
+	margin-top: 8%;
+}
+
+#vs-text {
+	margin-left: 0;
+	font-size: 500%;
+	color: red;
+	display: none;  /* Jquery fadeIn requires display property! */
+}
+
+#attack-messages {
+	color: red;
+	font-size: 80%;
+	overflow: scroll;
+}
+
 #attack-button {
-	
+	width: 80%;
 }
 

@@ -81,6 +81,10 @@ $('#palpatine').on('click', function() {
 	characterClicked(this, emperorPalpatine);
 });
 
+$('#attack-button').on('click', function() {
+	attack();
+});
+
 /* Entry point */
 function startGame() {
 	setupCharacterStats();
@@ -105,7 +109,16 @@ function setupCharacterStats() {
 // defender section
 function characterClicked(characterElement, characterObject) {
 	if(!userHasSelectedFighter) {
+		$('#selected-character').empty();
+
+		/* Add green shadow to identify as current */
+		$(characterElement).addClass('element-green-box-shadow');
+
+		/* Add green border */
 		$('#selected-character').append(characterElement);
+
+		/* Add border */
+		$('#selected-character > .panel-default').css({'border':'2px solid #66ff33'})
 
 		characterObject.selectedAsFighter = true;
 
@@ -115,9 +128,25 @@ function characterClicked(characterElement, characterObject) {
 		$(characterObject.selectedAudioId)[0].play();
 
 		populateAvailableEnemies();
+
+		// Enable attack button
+		$('#attack-button').prop('disabled', false);
 	}
 	else if(!userHasSelectedEnemy) {
+		$('#enemy-selected').empty();
+
+		$('#vs-text').fadeIn('slow');
+
+		/* Remove red shadow because this character is now a defender */
+		$(characterElement).removeClass('element-red-box-shadow')
+
+		/* Add green shadow to identify as current */
+		$(characterElement).addClass('element-green-box-shadow');
+
 		$('#enemy-selected').append(characterElement);
+
+		/* Add green border */
+		$('#enemy-selected > .panel-default').css({'border':'2px solid #66ff33'})
 
 		characterObject.selectedAsDefender = true;
 
@@ -140,7 +169,14 @@ function populateAvailableEnemies() {
 		
 		if(!currentObject.selectedAsFighter) {
 			var elementId = '#available-enemies-' + elementIdCounter;
+
+			/* Add shadow class */
+			$(currentObject.id).addClass(('element-red-box-shadow'));
+
 			$(elementId).append($(currentObject.id));
+
+			/* Add border */
+			$(elementId + ' > .panel-default').css({'border':'2px solid #ff0000'})
 
 			elementIdCounter++;
 		}
@@ -166,4 +202,18 @@ function shiftAvailableEnemies() {
 	}
 
 	return;
+}
+
+// Executes attack logic
+function attack() {
+	var attackMessages = $('#attack-messages');
+
+	// start by checking if a defender has been selected
+	// if a defender has not been selected, display a message
+	if(!userHasSelectedEnemy) {
+		attackMessages.empty();
+		attackMessages.append("<span>You have not selected a defender!");
+	} else {
+		attackMessages.empty();
+	}
 }

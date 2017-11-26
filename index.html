@@ -4,6 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
 	<title>Start Wars - RPG</title>
 
+	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 	<!-- Custom CSS -->
@@ -12,11 +13,12 @@
 	<!-- Star Wars glyphs CSS -->
 	<link rel="stylesheet" href="assets/starwars-glyphicons/css/starwars-glyphicons.css">
 
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Jquery -->
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 	
-	<!-- Latest compiled and minified JavaScript -->
+	<!-- Bootstrap Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -46,7 +48,7 @@
     					<h3 class="panel-title"></h3>
   					</div>
   					<div class="panel-body">
-    					<img src="assets/images/luke-skywalker250x250.png" class="character-img img-responsive" alt="">
+    					<img src="assets/images/luke-skywalker250x250.png" class="character-img img-responsive" alt="Luke Skywalker image">
   					</div>
   					<div class="panel-footer"></div>
 				</div>
@@ -57,7 +59,7 @@
     					<h3 class="panel-title"></h3>
   					</div>
   					<div class="panel-body">
-    					<img src="assets/images/darth-vader250x250.png" class="character-img img-responsive" alt="">
+    					<img src="assets/images/darth-vader250x250.png" class="character-img img-responsive" alt="Darth Vader image">
   					</div>
   					<div class="panel-footer"></div>
 				</div>
@@ -68,7 +70,7 @@
     					<h3 class="panel-title"></h3>
   					</div>
   					<div class="panel-body">
-    					<img src="assets/images/obi-wan250x250.png" class="character-img img-responsive" alt="">
+    					<img src="assets/images/obi-wan250x250.png" class="character-img img-responsive" alt="Obi-Wan image">
   					</div>
   					<div class="panel-footer"></div>
 				</div>
@@ -79,7 +81,7 @@
     					<h3 class="panel-title"></h3>
   					</div>
   					<div class="panel-body">
-    					<img src="assets/images/emperor-palpatine250x250.png" class="character-img img-responsive" alt="">
+    					<img src="assets/images/emperor-palpatine250x250.png" class="character-img img-responsive" alt="Emperor Palpatine image">
   					</div>
   					<div class="panel-footer"></div>
 				</div>
@@ -87,33 +89,76 @@
 		</div>
 
 		<div class="row">
-			<div id="selected-character" class="col-md-3">
-				<span>Selected Fighter</span>
+			<div class="row">
+				<div class="col-md-3">
+					<span class="section-heading">Selected Fighter</span>
+				</div>
+
+				<div class="col-md-1"></div>
+				<div class="col-md-1"></div>
+				<div class="col-md-1"></div>
+
+				<div class="col-md-3">
+					<span class="section-heading">Defender</span>
+				</div>
+
+				<div class="col-md-3"></div>
 			</div>
-			<div class="col-md-1">
-				<span>VS</span>
+			
+			<div class="row">
+				<div id="selected-character" class="col-md-3">
+					<div class="panel panel-default">
+						<div class="panel-heading"></div>
+  						<div class="panel-body">
+  							<img src="assets/images/empty-char-image.png" class="character-img img-responsive" alt="empty image">
+  						</div>
+  						<div class="panel-footer"></div>
+					</div>
+				</div>
+			
+				<div class="col-md-1"></div>
+			
+				<div id="vs-text-container" class="col-md-1">
+					<span id="vs-text">VS</span>
+				</div>
+			
+				<div class="col-md-1"></div>
+			
+				<div id="enemy-selected" class="col-md-3">
+					<div class="panel panel-default">
+						<div class="panel-heading"></div>
+  						<div class="panel-body">
+  							<img src="assets/images/empty-char-image.png" class="character-img img-responsive" alt="empty image">
+  						</div>
+  						<div class="panel-footer"></div>
+					</div>
+				</div>
+			
+				<div class="col-md-3"></div>
 			</div>
-			<div id="enemy-selected" class="col-md-3">
-				<span>Defender</span>
-			</div>
-			<div class="col-md-5"></div>
 		</div>
 
 		<div class="row">
-			<div class="col-md-3">
-				<button type="button" id="attack-button" class="btn btn-default btn-md">
-  					<span class="swg swg-saberjedi swg-2x"></span> Attack
+			<div class="col-md-2">
+				<button type="button" id="attack-button" class="btn btn-default btn-md" disabled="true">
+  					<span class="swg swg-saberjedi swg-2x"></span>Attack
 				</button>
 			</div>
+			<div class="col-md-7">
+				<div class="panel panel-default">
+  					<div id="attack-messages" class="panel-body"></div>
+				</div>
+			</div>
+			<div class="col-md-3"></div>
 		</div>
 
 		<div class="row">
 			<div class="row">
 				<div class="col-md-3">
-					<span>Available Enemies</span>
+					<span class="section-heading">Available Enemies</span>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" style="margin-top: 10px;">
 				<div id="available-enemies-1" class="col-md-3"></div>
 				<div id="available-enemies-2" class="col-md-3"></div>
 				<div id="available-enemies-3" class="col-md-3"></div>
