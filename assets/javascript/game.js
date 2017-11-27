@@ -1,12 +1,13 @@
 /* Character objects */
 var lukeSkywalker = {
 	name: 'Luke Skywalker',
+	selectedAsFighter: false,
+	selectedAsDefender: false,
+	hasBeenDefeated: false,
 	baseAttackPower: 6,
 	healthPoints: 100,
 	attackPower: 6,
 	counterAttackPower: 2,
-	selectedAsFighter: false,
-	selectedAsDefender: false,
 	id: '#luke-skywalker',
 	selectedAudioId: '#lightsaber-on',
 	increaseAttackPower: function() {
@@ -16,12 +17,13 @@ var lukeSkywalker = {
 
 var darthVader = {
 	name: 'Darth Vader',
+	selectedAsFighter: false,
+	selectedAsDefender: false,
+	hasBeenDefeated: false,
 	baseAttackPower: 8,
 	healthPoints: 100,
 	attackPower: 8,
 	counterAttackPower: 2,
-	selectedAsFighter: false,
-	selectedAsDefender: false,
 	id: '#darth-vader',
 	selectedAudioId: '#darth-vader-breathing',
 	increaseAttackPower: function() {
@@ -31,12 +33,13 @@ var darthVader = {
 
 var obiWan = {
 	name: 'Obi-Wan Kenobi',
+	selectedAsFighter: false,
+	selectedAsDefender: false,
+	hasBeenDefeated: false,
 	baseAttackPower: 10,
 	healthPoints: 120,
 	attackPower: 10,
 	counterAttackPower: 4,
-	selectedAsFighter: false,
-	selectedAsDefender: false,
 	id: '#obi-wan',
 	selectedAudioId: '#lightsaber-on',
 	increaseAttackPower: function() {
@@ -46,12 +49,13 @@ var obiWan = {
 
 var emperorPalpatine = {
 	name: 'Emperor Palpatine',
+	selectedAsFighter: false,
+	selectedAsDefender: false,
+	hasBeenDefeated: false,
 	baseAttackPower: 12,
 	healthPoints: 150,
 	attackPower: 12,
 	counterAttackPower: 6,
-	selectedAsFighter: false,
-	selectedAsDefender: false,
 	id: '#palpatine',
 	selectedAudioId: '#palpatine-good',
 	increaseAttackPower: function() {
@@ -60,11 +64,9 @@ var emperorPalpatine = {
 };
 
 /* Global variables */
-var characterObjects = [lukeSkywalker, darthVader, obiWan, emperorPalpatine];
-var userHasSelectedFighter = false;
-var userHasSelectedEnemy = false;
-var currentSelectedFighter;
-var currentSelectedEnemy;
+var allCharacterObjects = [lukeSkywalker, darthVader, obiWan, emperorPalpatine];
+var selectedFighterObj;
+var selectedDefenderObj;
 
 /* Event listeners */
 $('#luke-skywalker').on('click', function() {
@@ -87,17 +89,28 @@ $('#attack-button').on('click', function() {
 	attack();
 });
 
-/* Entry point */
+/* Functions */
+
+// Game entry point function
 function startGame() {
-	displayCharacterStats();
+	displayCharacterStats(null);
 
 	return;
 }
 
-/* Helper functions */
-function displayCharacterStats() {
-	for(var i=0; i<characterObjects.length; i++) {
-		var currentObject = characterObjects[i];
+// Displays stats on the character panel using the provided character object array.
+// Pass in null if using the global character array
+function displayCharacterStats(charactersArray) {
+	var loopOnThisArray = null;
+
+	if(charactersArray === null) {
+		loopOnThisArray = allCharacterObjects;
+	} else {
+		loopOnThisArray = charactersArray;
+	}
+
+	for(var i=0; i<loopOnThisArray.length; i++) {
+		var currentObject = allCharacterObjects[i];
 
 		$(currentObject.id + ' .panel-heading').html(currentObject.name);
 		$(currentObject.id + ' .panel-footer').html(currentObject.healthPoints);
@@ -107,10 +120,12 @@ function displayCharacterStats() {
 }
 
 // This function is used to determine if a clicked character
-// needs to be placed in the selected figther section or the
+// needs to be placed in the selected fighter section or the
 // defender section
 function characterClicked(characterElement, characterObject) {
-	if(!userHasSelectedFighter) {
+	//console.log(selectedFighterObj + " " + selectedDefenderObj);
+
+	if(typeof selectedFighterObj === 'undefined') {
 		$('#selected-character').empty();
 
 		/* Remove orange shadow */
@@ -123,9 +138,7 @@ function characterClicked(characterElement, characterObject) {
 
 		characterObject.selectedAsFighter = true;
 
-		userHasSelectedFighter = true;
-
-		currentSelectedFighter = characterObject;
+		selectedFighterObj = characterObject;
 
 		// Play selected sound
 		$(characterObject.selectedAudioId)[0].play();
@@ -135,24 +148,27 @@ function characterClicked(characterElement, characterObject) {
 		// Enable attack button
 		$('#attack-button').prop('disabled', false);
 	}
-	else if(!userHasSelectedEnemy) {
+	// The hasBeenDefeated flag is checked to handle cases when a user is selecting a new enemy
+	// after having defeated one
+	else if(typeof selectedDefenderObj === 'undefined' || selectedDefenderObj.hasBeenDefeated) {
 		$('#enemy-selected').empty();
 
 		$('#vs-text').fadeIn('slow');
 
 		/* Remove red shadow because this character is now a defender */
-		$(characterElement).removeClass('element-red-box-shadow')
+		$(characterElement).removeClass('element-red-box-shadow');
 
 		/* Add green shadow to identify as current */
 		$(characterElement).addClass('element-green-box-shadow');
 
-		$('#enemy-selected').append(characterElement);
-
 		characterObject.selectedAsDefender = true;
 
-		currentSelectedEnemy = characterObject;
+		$('#enemy-selected').append(characterElement);
 
-		userHasSelectedEnemy = true;
+		selectedDefenderObj = characterObject;
+
+		// Play selected sound
+		$(characterObject.selectedAudioId)[0].play();
 
 		shiftAvailableEnemies();
 	}
@@ -166,10 +182,12 @@ function characterClicked(characterElement, characterObject) {
 function populateAvailableEnemies() {
 	var elementIdCounter = 1;
 
-	for(var i=0; i<characterObjects.length; i++) {
-		var currentObject = characterObjects[i];
+	for(var i=0; i<allCharacterObjects.length; i++) {
+		var currentObject = allCharacterObjects[i];
 		
-		if(!currentObject.selectedAsFighter) {
+		// Only display the remaining characters after the user has selected their fighter.
+		// If a characters has been defeated, it should not be displayed.
+		if(!currentObject.selectedAsFighter && !currentObject.hasBeenDefeated) {
 			var elementId = '#available-enemies-' + elementIdCounter;
 
 			/* Remove orange shadow */
@@ -191,10 +209,11 @@ function populateAvailableEnemies() {
 function shiftAvailableEnemies() {
 	var elementIdCounter = 1;
 
-	for(var i=0; i<characterObjects.length; i++) {
-		var currentObject = characterObjects[i];
+	for(var i=0; i<allCharacterObjects.length; i++) {
+		var currentObject = allCharacterObjects[i];
 
-		if(!currentObject.selectedAsDefender && !currentObject.selectedAsFighter) {
+		// Only work with characters that have not been defeated yet
+		if(!currentObject.selectedAsDefender && !currentObject.selectedAsFighter && !currentObject.hasBeenDefeated) {
 			var elementId = '#available-enemies-' + elementIdCounter;
 
 			$(elementId).append($(currentObject.id));
@@ -212,25 +231,76 @@ function attack() {
 
 	// start by checking if a defender has been selected
 	// if a defender has not been selected, display a message
-	if(!userHasSelectedEnemy) {
+	if(typeof selectedDefenderObj === 'undefined' || selectedDefenderObj.hasBeenDefeated) {
 		attackMessages.empty();
 		attackMessages.append("You have not selected a defender!");
 	} else {
+		// Play attack sound
+		$('#light-saber-clash')[0].play();
+
 		attackMessages.empty();
 
 		// Subtract from enemy health points
-		currentSelectedEnemy.healthPoints -= currentSelectedFighter.attackPower;
+		selectedDefenderObj.healthPoints -= selectedFighterObj.attackPower;
 
-		attackMessages.append('You attacked ' + currentSelectedEnemy.name + ' for ' + currentSelectedFighter.attackPower + ' damage.<br>');
+		attackMessages.append('You attacked ' + selectedDefenderObj.name + ' for ' + selectedFighterObj.attackPower + ' damage.<br>');
 
 		// Increase selected fighter attack power
-		currentSelectedFighter.attackPower += currentSelectedFighter.baseAttackPower;
+		selectedFighterObj.attackPower += selectedFighterObj.baseAttackPower;
 
 		// Subtract from selected fighter health points
-		currentSelectedFighter.healthPoints -= currentSelectedEnemy.counterAttackPower
+		selectedFighterObj.healthPoints -= selectedDefenderObj.counterAttackPower
 
-		attackMessages.append(currentSelectedEnemy.name + ' attacked you for ' + currentSelectedEnemy.counterAttackPower + ' damage.');
+		attackMessages.append(selectedDefenderObj.name + ' attacked you for ' + selectedDefenderObj.counterAttackPower + ' damage.');
 
-		displayCharacterStats();
+		displayCharacterStats([selectedFighterObj, selectedDefenderObj]);
+
+		// Check if user has won this fight
+		if(hasUserWon()) {
+			attackMessages.empty();
+			attackMessages.append('You have defeated ' + selectedDefenderObj.name + '.<br>Choose another enemy to fight!');
+
+			clearDefender();
+		} 
+		else if(hasUserLost()) {
+			attackMessages.append('You have been defeated!');
+
+			// TODO
+			// display a restart game button
+			// add logic to restart the game
+		}
 	}
+
+	return;
+}
+
+// Checks if the user is a winner
+function hasUserWon() {
+	if(selectedFighterObj.healthPoints > 0 && selectedDefenderObj.healthPoints <= 0) {
+		return true;
+	}
+
+	return false;
+}
+
+// Checks if the user has lost
+function hasUserLost() {
+	if(selectedFighterObj.healthPoints <= 0 && selectedDefenderObj.healthPoints > 0) {
+		return true;
+	}
+
+	return false;
+}
+
+// Clears the defender panel
+function clearDefender() {
+	selectedDefenderObj.hasBeenDefeated = true;
+
+	//console.log(allCharacterObjects);
+
+	$('#enemy-selected').empty();
+
+	$('#vs-text').fadeOut('slow');
+
+	return;
 }
