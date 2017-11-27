@@ -110,7 +110,7 @@ function displayCharacterStats(charactersArray) {
 	}
 
 	for(var i=0; i<loopOnThisArray.length; i++) {
-		var currentObject = allCharacterObjects[i];
+		var currentObject = loopOnThisArray[i];
 
 		$(currentObject.id + ' .panel-heading').html(currentObject.name);
 		$(currentObject.id + ' .panel-footer').html(currentObject.healthPoints);
@@ -123,8 +123,6 @@ function displayCharacterStats(charactersArray) {
 // needs to be placed in the selected fighter section or the
 // defender section
 function characterClicked(characterElement, characterObject) {
-	//console.log(selectedFighterObj + " " + selectedDefenderObj);
-
 	if(typeof selectedFighterObj === 'undefined') {
 		$('#selected-character').empty();
 
