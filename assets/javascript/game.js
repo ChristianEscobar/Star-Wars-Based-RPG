@@ -63,6 +63,8 @@ var emperorPalpatine = {
 var characterObjects = [lukeSkywalker, darthVader, obiWan, emperorPalpatine];
 var userHasSelectedFighter = false;
 var userHasSelectedEnemy = false;
+var currentSelectedFighter;
+var currentSelectedEnemy;
 
 /* Event listeners */
 $('#luke-skywalker').on('click', function() {
@@ -87,13 +89,13 @@ $('#attack-button').on('click', function() {
 
 /* Entry point */
 function startGame() {
-	setupCharacterStats();
+	displayCharacterStats();
 
 	return;
 }
 
 /* Helper functions */
-function setupCharacterStats() {
+function displayCharacterStats() {
 	for(var i=0; i<characterObjects.length; i++) {
 		var currentObject = characterObjects[i];
 
@@ -111,18 +113,19 @@ function characterClicked(characterElement, characterObject) {
 	if(!userHasSelectedFighter) {
 		$('#selected-character').empty();
 
+		/* Remove orange shadow */
+		$(characterElement).removeClass('element-orange-box-shadow');
+
 		/* Add green shadow to identify as current */
 		$(characterElement).addClass('element-green-box-shadow');
 
-		/* Add green border */
 		$('#selected-character').append(characterElement);
-
-		/* Add border */
-		$('#selected-character > .panel-default').css({'border':'2px solid #66ff33'})
 
 		characterObject.selectedAsFighter = true;
 
 		userHasSelectedFighter = true;
+
+		currentSelectedFighter = characterObject;
 
 		// Play selected sound
 		$(characterObject.selectedAudioId)[0].play();
@@ -145,10 +148,9 @@ function characterClicked(characterElement, characterObject) {
 
 		$('#enemy-selected').append(characterElement);
 
-		/* Add green border */
-		$('#enemy-selected > .panel-default').css({'border':'2px solid #66ff33'})
-
 		characterObject.selectedAsDefender = true;
+
+		currentSelectedEnemy = characterObject;
 
 		userHasSelectedEnemy = true;
 
@@ -170,13 +172,13 @@ function populateAvailableEnemies() {
 		if(!currentObject.selectedAsFighter) {
 			var elementId = '#available-enemies-' + elementIdCounter;
 
+			/* Remove orange shadow */
+			$(currentObject.id).removeClass('element-orange-box-shadow');
+
 			/* Add shadow class */
 			$(currentObject.id).addClass(('element-red-box-shadow'));
 
 			$(elementId).append($(currentObject.id));
-
-			/* Add border */
-			$(elementId + ' > .panel-default').css({'border':'2px solid #ff0000'})
 
 			elementIdCounter++;
 		}
@@ -212,8 +214,23 @@ function attack() {
 	// if a defender has not been selected, display a message
 	if(!userHasSelectedEnemy) {
 		attackMessages.empty();
-		attackMessages.append("<span>You have not selected a defender!");
+		attackMessages.append("You have not selected a defender!");
 	} else {
 		attackMessages.empty();
+
+		// Subtract from enemy health points
+		currentSelectedEnemy.healthPoints -= currentSelectedFighter.attackPower;
+
+		attackMessages.append('You attacked ' + currentSelectedEnemy.name + ' for ' + currentSelectedFighter.attackPower + ' damage.<br>');
+
+		// Increase selected fighter attack power
+		currentSelectedFighter.attackPower += currentSelectedFighter.baseAttackPower;
+
+		// Subtract from selected fighter health points
+		currentSelectedFighter.healthPoints -= currentSelectedEnemy.counterAttackPower
+
+		attackMessages.append(currentSelectedEnemy.name + ' attacked you for ' + currentSelectedEnemy.counterAttackPower + ' damage.');
+
+		displayCharacterStats();
 	}
 }

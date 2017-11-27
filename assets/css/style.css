@@ -26,10 +26,17 @@ body {
 
 .element-red-box-shadow {
 	box-shadow: 10px 10px 5px #ff0000;
+	border:2px solid #ff0000;
 }
 
 .element-green-box-shadow {
 	box-shadow: 10px 10px 5px #66ff33;
+	border:2px solid #66ff33;
+}
+
+.element-orange-box-shadow {
+	box-shadow: 10px 10px 5px #eca637;
+	border: 2px solid #eca637;
 }
 
 #vs-text-container {
