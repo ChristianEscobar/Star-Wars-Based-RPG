@@ -4,10 +4,10 @@ var lukeSkywalker = {
 	selectedAsFighter: false,
 	selectedAsDefender: false,
 	hasBeenDefeated: false,
-	baseAttackPower: 6,
+	baseAttackPower: 10,
 	healthPoints: 100,
-	attackPower: 6,
-	counterAttackPower: 2,
+	attackPower: 10,
+	counterAttackPower: 5,
 	id: '#luke-skywalker',
 	selectedAudioId: '#lightsaber-on',
 	increaseAttackPower: function() {
@@ -20,10 +20,10 @@ var darthVader = {
 	selectedAsFighter: false,
 	selectedAsDefender: false,
 	hasBeenDefeated: false,
-	baseAttackPower: 8,
-	healthPoints: 100,
-	attackPower: 8,
-	counterAttackPower: 2,
+	baseAttackPower: 10,
+	healthPoints: 180,
+	attackPower: 10,
+	counterAttackPower: 25,
 	id: '#darth-vader',
 	selectedAudioId: '#darth-vader-breathing',
 	increaseAttackPower: function() {
@@ -36,10 +36,10 @@ var obiWan = {
 	selectedAsFighter: false,
 	selectedAsDefender: false,
 	hasBeenDefeated: false,
-	baseAttackPower: 10,
+	baseAttackPower: 8,
 	healthPoints: 120,
-	attackPower: 10,
-	counterAttackPower: 4,
+	attackPower: 8,
+	counterAttackPower: 13,
 	id: '#obi-wan',
 	selectedAudioId: '#lightsaber-on',
 	increaseAttackPower: function() {
@@ -55,7 +55,7 @@ var emperorPalpatine = {
 	baseAttackPower: 12,
 	healthPoints: 150,
 	attackPower: 12,
-	counterAttackPower: 6,
+	counterAttackPower: 20,
 	id: '#palpatine',
 	selectedAudioId: '#palpatine-good',
 	increaseAttackPower: function() {
@@ -88,6 +88,10 @@ $('#palpatine').on('click', function() {
 
 $('#attack-button').on('click', function() {
 	attack();
+});
+
+$('#restart-button').on('click', function() {
+	window.location.reload();
 });
 
 /* Functions */
@@ -244,18 +248,20 @@ function attack() {
 
 		attackMessages.empty();
 
+		// Subtract from selected fighter health points
+		if(_selectedDefenderObj.healthPoints > _selectedFighterObj.attackPower) {
+			_selectedFighterObj.healthPoints -= _selectedDefenderObj.counterAttackPower;
+		}
+
 		// Subtract from enemy health points
 		_selectedDefenderObj.healthPoints -= _selectedFighterObj.attackPower;
 
 		attackMessages.append('You attacked ' + _selectedDefenderObj.name + ' for ' + _selectedFighterObj.attackPower + ' damage.<br>');
-
-		// Increase selected fighter attack power
-		_selectedFighterObj.attackPower += _selectedFighterObj.baseAttackPower;
-
-		// Subtract from selected fighter health points
-		_selectedFighterObj.healthPoints -= _selectedDefenderObj.counterAttackPower
-
+		
 		attackMessages.append(_selectedDefenderObj.name + ' attacked you for ' + _selectedDefenderObj.counterAttackPower + ' damage.');
+	
+		// Increase selected fighter attack power
+		_selectedFighterObj.increaseAttackPower();
 
 		displayCharacterStats([_selectedFighterObj, _selectedDefenderObj]);
 
@@ -266,27 +272,15 @@ function attack() {
 
 			clearDefender();
 
-			// TODO
-			// Check if user has won the game
-			// Play winning sound
-			// Display win message
-			// Display restart game button
 			if(hasUserWonGame()) {
-				attackMessages.empty();
-				attachMessages.append('You have defeated all your enemies.  Well done!')
-				
-
-				$("#the-force-is-strong")[0].play();
+				endTheGame(true, false);
 			}
 		} 
 		else if(hasUserLost()) {
-			attackMessages.append('You have been defeated!');
-
-			// TODO
-			// Play losing sound
-			// Display lose message
-			// Display restart game button
-			$("#the-power-of-the-darkside")[0].play();
+			endTheGame(false, false);
+		}
+		else if(isMatchDraw()) {
+			endTheGame(false, true);
 		}
 	}
 
@@ -334,17 +328,63 @@ function hasUserLost() {
 	return false;
 }
 
+// For those times when a draw is all you have left 
+function isMatchDraw() {
+	if(_selectedFighterObj.healthPoints <= 0 && _selectedDefenderObj.healthPoints <= 0) {
+		return true;
+	}
+
+	return false;
+}
+
 // Clears the defender panel
 function clearDefender() {
 	_selectedDefenderObj.hasBeenDefeated = true;
-
-	//console.log(_allCharacterObjects);
 
 	$('#enemy-selected').empty();
 
 	$('#vs-text').fadeOut('slow');
 
-	console.log(_availableEnemyObjects);
+	return;
+}
+
+// Ends game based on if user has won or lost and will 
+// add the restart button to the DOM
+function endTheGame(isWinner, isDraw) {
+	var attackMessages = $('#attack-messages');
+
+	var audioElementId;
+	var message;
+
+	if(isWinner) {
+		audioElementId = '#the-force-is-strong';
+
+		message = 'You have defeated all your enemies.  Well done!';
+	} else if(isDraw) {
+		audioElementId = '#doomed';
+
+		message = 'It\'s a draw!  What are the odds of that?  GAME OVER!';
+	}
+	else {
+		audioElementId = '#the-power-of-the-darkside';
+
+		message = _selectedDefenderObj.name + ' has defeated you.  GAME OVER!';
+	}
+
+	// Here as precaution only
+	// The pause method results in an exception to the console, will need to improve this
+	$('#light-saber-clash')[0].pause();
+
+	$(audioElementId)[0].play();
+
+	attackMessages.empty();
+
+	attackMessages.append(message);
+
+	// Disable attack button
+	$('#attack-button').prop('disabled', true);
+
+	$('#restart-button').show();
 
 	return;
 }

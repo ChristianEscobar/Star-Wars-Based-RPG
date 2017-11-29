@@ -49,6 +49,10 @@
 	<audio id="the-power-of-the-darkside">
 		<source src="assets/sounds/the-power-of-the-darkside.mp3" type="audio/wav">
 	</audio>
+
+	<audio id="doomed">
+		<source src="assets/sounds/c3po-doomed.wav" type="audio/wav">
+	</audio>
 	<!-- End Audio -->
 
 	<div class="container">
@@ -101,22 +105,22 @@
 
 		<div class="row">
 			<div class="row">
+				<div class="col-md-2"></div>
+
 				<div class="col-md-3">
 					<span class="section-heading">Selected Fighter</span>
 				</div>
 
 				<div class="col-md-1"></div>
-				<div class="col-md-1"></div>
-				<div class="col-md-1"></div>
 
 				<div class="col-md-3">
 					<span class="section-heading">Defender</span>
 				</div>
-
-				<div class="col-md-3"></div>
 			</div>
 			
 			<div class="row">
+				<div class="col-md-2"></div>
+
 				<div id="selected-character" class="col-md-3">
 					<div class="panel panel-default">
 						<div class="panel-heading"></div>
@@ -127,13 +131,9 @@
 					</div>
 				</div>
 			
-				<div class="col-md-1"></div>
-			
 				<div id="vs-text-container" class="col-md-1">
 					<span id="vs-text">VS</span>
 				</div>
-			
-				<div class="col-md-1"></div>
 			
 				<div id="enemy-selected" class="col-md-3">
 					<div class="panel panel-default">
@@ -144,33 +144,41 @@
   						<div class="panel-footer"></div>
 					</div>
 				</div>
-			
-				<div class="col-md-3"></div>
+
+				<div class="col-md-2"></div>
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="col-md-2">
-				<button type="button" id="attack-button" class="btn btn-default btn-md" disabled="true">
-  					<span class="swg swg-lightsabers swg-3x"></span>
-  					<p id="attack-btn-text">Attack</p> 
+				<button type="button" id="restart-button" class="btn btn-default btn-md">
+  					<span class="swg swg-r2d2 swg-3x"></span>
+  					<p class="game-btn-text">RESTART</p> 
 				</button>
 			</div>
-			<div class="col-md-7">
+			
+			<div class="col-md-2">
+				<button type="button" id="attack-button" class="btn btn-default btn-md" disabled="true">
+  					<span class="swg swg-saberjedi swg-3x"></span>
+  					<p class="game-btn-text">Attack</p> 
+				</button>
+			</div>
+			<div class="col-md-5">
 				<div class="panel panel-default">
   					<div id="attack-messages" class="panel-body"></div>
 				</div>
 			</div>
-			<div class="col-md-3"></div>
 		</div>
 
 		<div class="row">
 			<div class="row">
+				<div class="col-md-2"></div>
 				<div class="col-md-3">
 					<span class="section-heading">Available Enemies</span>
 				</div>
 			</div>
 			<div class="row">
+				<div class="col-md-2"></div>
 				<div id="available-enemies-1" class="col-md-3"></div>
 				<div id="available-enemies-2" class="col-md-3"></div>
 				<div id="available-enemies-3" class="col-md-3"></div>
