@@ -129,6 +129,8 @@ function displayCharacterStats(charactersArray) {
 // needs to be placed in the selected fighter section or the
 // defender section
 function characterClicked(characterElement, characterObject) {
+	// Check if the global var used to hold the selected figther is undefined.
+	// This is how it will be determined if the user has not selected a fighter.
 	if(typeof _selectedFighterObj === 'undefined') {
 		$('#selected-character').empty();
 

@@ -16,7 +16,7 @@ body {
 
 .panel-footer, .panel-default > .panel-heading {
 	text-align: center;
-	color: #eca637;
+	color: #f3c72a;
 	height: 41px;
 	background-color: #5f6f77;
 	font-size: 110%;
@@ -59,7 +59,7 @@ body {
 
 #attack-messages {
 	color: black;
-	font-size: 80%;
+	font-size: 90%;
 	overflow: scroll;
 	height: 55px;
 }
