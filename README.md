@@ -1,3 +1,3 @@
-# week-4-game
+# Star Wars Based RPG Game
 
 A Star Wars based RPG game.
