@@ -25,5 +25,5 @@ An HTML based Star Wars themed RPG game.
 
 4. You win the game by defeating all enemy characters. You will lose the game the game if your character's `HP` falls to zero or below.
 
-## Under the Hood
+## Under The Hood
 This game was created using HTML/CSS/JavaScript and JQuery. 
